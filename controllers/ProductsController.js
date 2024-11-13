@@ -58,7 +58,7 @@ export const getProducts = async (req, res) => {
   }
 };
 
-export const getProductById = async () => {
+export const getProductById = async (req, res) => {
   try {
     const product = await Product.findById(req.params._id)
       .populate("shop")
