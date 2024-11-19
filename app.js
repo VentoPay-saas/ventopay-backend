@@ -9,6 +9,7 @@ import productsRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/OrderRoutes.js";
 import brandRoutes from "./routes/Brand.js";
 import unitRoutes from "./routes/UnitRoutes.js";
+import subscriptionRoutes from "./routes/UnitRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -24,6 +25,7 @@ app.use("/products", productsRoutes);
 app.use("/orders", orderRoutes);
 app.use("/brands", brandRoutes);
 app.use("/units", unitRoutes);
+app.use("/subscription", subscriptionRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");
