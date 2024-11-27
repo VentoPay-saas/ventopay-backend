@@ -10,38 +10,41 @@ const orderSchema = new Schema({
   },
   currency_id: {
     type: Number,
-    required: true
+    required: true,
   },
   rate: {
     type: Number,
-    required: true
-
+    required: true,
   },
   shop_id: {
     type: Number,
-    required: true
-
+    required: true,
   },
   paymentType: {
     type: String,
-    required: true
-
+    required: true,
   },
   products: {
     type: Array,
-    required: true
-
+    required: true,
   },
   phone: {
     type: Number,
-    required: true
+    required: true,
   },
 
   status: {
     type: String,
-    enum: ["new", "accepted", "cooking", "ready", "on_a_way", "delivered", "cancelled"],
-    default: "new"
-  }
-
+    enum: [
+      "new",
+      "accepted",
+      "cooking",
+      "ready",
+      "on_a_way",
+      "delivered",
+      "cancelled",
+    ],
+    default: "new",
+  },
 });
-export default mongoose.model("Order", orderSchema)
+export default mongoose.model("Order", orderSchema);
