@@ -1,4 +1,4 @@
-import users from "../dummyData/Users.js";
+import { User } from "../models/userModel.js";
 
 const loginController = async (req, res) => {
   const { email, password } = req.body;
@@ -8,7 +8,7 @@ const loginController = async (req, res) => {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
-  const user = users.find(
+  const user = User.find(
     (user) => user.login === email && user.password === password
   );
   console.log(user);
