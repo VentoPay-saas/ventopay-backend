@@ -11,6 +11,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      default: "admin",
+      enums: ["user", "waiter", "admin", "moderator"],
+    },
+    img: {
+      type: String,
+      default:
+        "https://www.shutterstock.com/shutterstock/photos/2526512481/display_1500/stock-vector-avatar-gender-neutral-silhouette-vector-illustration-profile-picture-no-image-for-social-media-2526512481.jpg",
+    },
+    shop: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+    },
+    worker_shop: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "WorkerShop",
+    },
   },
   { timestamps: true }
 );
