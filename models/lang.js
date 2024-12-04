@@ -1,7 +1,46 @@
 const languages = [
-  { id: 1, name: "English", code: "en", isActive: true },
-  { id: 2, name: "Spanish", code: "es", isActive: true },
-  { id: 3, name: "French", code: "fr", isActive: false },
+  {
+    id: 1,
+    title: "English",
+    image: "img1.jpg",
+    status: "Active",
+    options: [],
+  },
+  {
+    id: 2,
+    title: "Russian",
+    image: "img2.jpg",
+    status: "Active",
+    options: [],
+  },
+  {
+    id: 3,
+    title: "Ar",
+    image: "img3.jpg",
+    status: "Active",
+    options: [],
+  },
+  {
+    id: 4,
+    title: "Vietnamese",
+    image: "img4.jpg",
+    status: "Active",
+    options: [],
+  },
+  {
+    id: 5,
+    title: "infdo",
+    image: "img5.jpg",
+    status: "Active",
+    options: [],
+  },
+  {
+    id: 6,
+    title: "French",
+    image: "img6.jpg",
+    status: "Active",
+    options: [],
+  },
 ];
 
 app.get("/rest/languages/active", (req, res) => {
