@@ -9,7 +9,8 @@ import productsRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/OrderRoutes.js";
 import brandRoutes from "./routes/Brand.js";
 import unitRoutes from "./routes/UnitRoutes.js";
-import subscriptionRoutes from "./routes/UnitRoutes.js";
+import subscriptionRoutes from "./routes/SubscriptionRoutes.js";
+import currenciesRoutes from "./routes/CurrenciesRoute.js";
 dotenv.config();
 
 const app = express();
@@ -20,12 +21,13 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use("/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/dashboard/admin", currenciesRoutes);
 app.use("/products", productsRoutes);
 app.use("/orders", orderRoutes);
 app.use("/brands", brandRoutes);
 app.use("/units", unitRoutes);
-app.use("/subscription", subscriptionRoutes);
+app.use("/api/v1/dashboard/admin", subscriptionRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");
