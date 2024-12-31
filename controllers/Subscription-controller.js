@@ -21,7 +21,7 @@ export const createSub = async (req, res) => {
     res.status(HttpStatusCode.CREATED).json({
       message: "Created Successfully",
       status: true,
-      subscription: saveData,
+      data: saveData,
     });
   } catch (error) {
     console.error("Error creating subscription:", error);
@@ -44,7 +44,7 @@ export const getSub = async (req, res) => {
     res.status(HttpStatusCode.OK).json({
       message: "Fetched Successfully",
       status: true,
-      subscriptions: getData,
+      data: getData,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -66,7 +66,7 @@ export const getSubById = async (req, res) => {
     res.status(HttpStatusCode.OK).json({
       message: "Fetched Successfully",
       status: true,
-      subscription: getData,
+      data: getData,
     });
   } catch (error) {
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({

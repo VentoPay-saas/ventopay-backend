@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const subscriptionSchema = new mongoose.Schema(
   {
     title: {
-      type: String,
-      required: true,
+      type: Object,
       lowerCase: true,
     },
     limit: {
@@ -12,7 +11,7 @@ const subscriptionSchema = new mongoose.Schema(
       required: true,
     },
     option_type: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
     },
   },
   { timestamps: true }
