@@ -23,10 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/dashboard/admin", currenciesRoutes);
-app.use("/products", productsRoutes);
-app.use("/orders", orderRoutes);
+app.use("/api/v1/rest/", productsRoutes);
+app.use("/api/v1/rest", orderRoutes);
 app.use("/brands", brandRoutes);
-app.use("/units", unitRoutes);
+app.use("/api/v1/dashboard/admin", unitRoutes);
 app.use("/api/v1/dashboard/admin", subscriptionRoutes);
 
 app.get("/", (req, res) => {
