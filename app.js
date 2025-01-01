@@ -11,6 +11,7 @@ import brandRoutes from "./routes/Brand.js";
 import unitRoutes from "./routes/UnitRoutes.js";
 import subscriptionRoutes from "./routes/SubscriptionRoutes.js";
 import currenciesRoutes from "./routes/CurrenciesRoute.js";
+import galleries from "./routes/Galleries.js";
 dotenv.config();
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/v1/rest", orderRoutes);
 app.use("/brands", brandRoutes);
 app.use("/api/v1/dashboard/admin", unitRoutes);
 app.use("/api/v1/dashboard/admin", subscriptionRoutes);
+app.use("/api/v1/dashboard", galleries);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");
