@@ -8,7 +8,7 @@ const router = Router();
 
 // router.route('/login').post(loginController);
 // router.route('/register').post(loginController);
-
+console.log("i am login");
 router.post("/login", loginController);
 router.post("/register", registerController);
 

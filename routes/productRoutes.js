@@ -170,7 +170,7 @@ import { createProduct, getProductById, getProducts } from './../controllers/Pro
 const router = express.Router();
 
 router.post("/createProduct", createProduct);
-router.get("/products", getProducts);
+router.get("/products/paginate", getProducts);
 router.get("/products/:_id", getProductById);
 
 export default router;

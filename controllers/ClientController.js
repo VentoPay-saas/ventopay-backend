@@ -31,6 +31,7 @@ export const createClient = async (req, res) => {
     await newClient.save();
     res.status(HttpStatusCode.CREATED).json(newClient);
   } catch (error) {
+    console.log(error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: error.message });

@@ -9,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.get("/orders", getAllOrders);
+router.get("/order-statuses", getAllOrders);
 router.post("/orders", createOrder);
 router.get("/orders/:_id", getOrderById);
 router.delete("/orders/:_id", deleteOrder);

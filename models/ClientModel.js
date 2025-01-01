@@ -32,10 +32,9 @@ const clientSchema = new mongoose.Schema({
   },
   password_confirmation: {
     type: String,
-    required: true,
   },
   images: {
-    type: String,
+    type: Array,
   },
 });
 
