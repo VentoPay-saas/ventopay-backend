@@ -1,4 +1,5 @@
 import cloudinary from "../config/Cloudinary.js";
+import bcrypt from "bcrypt";
 import Client from "../models/ClientModel.js";
 import { HttpStatusCode } from "../utils/StatusCodes.js";
 
@@ -11,10 +12,19 @@ export const createClient = async (req, res) => {
     birthday,
     gender,
     password,
-    passwordConfirm,
+    password_confirmation,
   } = req.body;
 
   try {
+    if (password !== password_confirmation) {
+      return res
+        .status(HttpStatusCode.BAD_REQUEST)
+        .json({ message: "Passwords do not match" });
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const result = req.file
       ? await cloudinary.uploader.upload(req.file.path)
       : null;
@@ -26,7 +36,7 @@ export const createClient = async (req, res) => {
       phone,
       birthday,
       gender,
-      password,
+      password: hashedPassword,
       images: result ? [result.secure_url] : [],
     });
 
