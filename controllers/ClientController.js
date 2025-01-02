@@ -13,8 +13,11 @@ export const createClient = async (req, res) => {
     password,
     passwordConfirm,
   } = req.body;
+
   try {
-    const result = await cloudinary.uploader.upload(req.file.path);
+    const result = req.file
+      ? await cloudinary.uploader.upload(req.file.path)
+      : null;
 
     const newClient = new Client({
       firstname,
@@ -24,16 +27,15 @@ export const createClient = async (req, res) => {
       birthday,
       gender,
       password,
-      passwordConfirm,
-      images: result.secure_url,
+      images: result ? [result.secure_url] : [],
     });
 
     await newClient.save();
     res.status(HttpStatusCode.CREATED).json(newClient);
   } catch (error) {
-    console.log(error);
+    console.error("Error creating client:", error);
     res
       .status(HttpStatusCode.INTERNAL_SERVER_ERROR)
-      .json({ message: error.message });
+      .json({ message: "Error creating client", error: error.message });
   }
 };
