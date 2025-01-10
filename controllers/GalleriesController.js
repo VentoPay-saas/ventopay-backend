@@ -3,6 +3,8 @@ import Galleries from "../models/Galleries.js";
 
 // CREATE
 export const createGallery = async (req, res) => {
+  console.log("req:", req);
+
   try {
     const { type } = req.body;
 
@@ -24,7 +26,7 @@ export const createGallery = async (req, res) => {
 
     res.status(201).json({
       message: "Gallery entry created successfully",
-      gallery,
+      data: gallery,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -35,7 +37,10 @@ export const createGallery = async (req, res) => {
 export const getAllGalleries = async (req, res) => {
   try {
     const galleries = await Galleries.find();
-    res.status(200).json(galleries);
+    res.status(200).json({
+      data: galleries,
+      status: true
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -51,7 +56,10 @@ export const getGalleryById = async (req, res) => {
       return res.status(404).json({ error: "Gallery not found" });
     }
 
-    res.status(200).json(gallery);
+    res.status(200).json({
+      data: gallery,
+      status: true
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

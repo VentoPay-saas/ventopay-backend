@@ -1,27 +1,23 @@
 import mongoose from "mongoose";
+const BrandSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  active: { type: Boolean, default: true },
+  images: [
+    {
+      uid: { type: String, required: true },
+      name: { type: String, required: true },
+      status: { type: String, required: true },
+      url: { type: String, required: true },
+      created: { type: Boolean, default: false },
+    },
+  ],
+  status: {
+    type: String,
+    enum: ["published", "unpublished", "pending"],
+    default: "published"
+  }
+});
 
-const Schema = mongoose.Schema;
+const Brand = mongoose.model("Brand", BrandSchema);
 
-const brandSchema = new Schema(
-  {
-    userId: {
-      type: Schema.ObjectId,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: String,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  { timestamps: true }
-);
-
-export default mongoose.model("brand", brandSchema);
+export default Brand;
