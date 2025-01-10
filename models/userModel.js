@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema(
   {
+    firstname: {
+      type: String
+    },
+    lastname: {
+      type: String
+    },
+
     email: {
       type: String,
       required: true,
@@ -25,10 +32,10 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
     },
-    worker_shop: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "WorkerShop",
-    },
+    // worker_shop: {
+    //   type: [mongoose.Schema.Types.ObjectId],
+    //   ref: "WorkerShop",
+    // },
   },
   { timestamps: true }
 );

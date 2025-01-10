@@ -1,18 +1,11 @@
 import express from 'express';
-import {
-  createBrand,
-  getBrand,
-  updateBrand,
-  deleteBrand,
-  getAllBrands
-} from '../controllers/BrandController.js';
-import upload from '../middleware/UploadFile.js';
+import { createBrand, getPaginateBrands, deleteBrand, getBrandById, updateBrand } from '../controllers/BrandController.js';
 
 const router = express.Router();
-router.post('/createBrand', upload.single('image'), createBrand);
-router.get('/brand', getAllBrands);
-router.get('/brand/:_id', getBrand);
-router.put('/brand/:_id', upload.single('image'), updateBrand);
-router.delete('/brand/:_id', deleteBrand);
+router.post('/brands', createBrand);
+router.get('/brands/paginate', getPaginateBrands);
+router.delete('/brands/delete', deleteBrand);
+router.get('/brands/:id', getBrandById);
+router.put('/brands/:id', updateBrand);
 
 export default router;
