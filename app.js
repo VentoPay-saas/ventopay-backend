@@ -17,6 +17,7 @@ import shopRoutes from "./routes/ShopRoutes.js";
 import bannerRoutes from "./routes/Banner.js";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/CategoriesRoute.js";
+import clientRouter from "./routes/ClientRoute.js";
 dotenv.config();
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api/v1/dashboard/admin", shopRoutes);
 app.use("/api/v1/dashboard/admin", bannerRoutes);
 app.use("/api/v1/dashboard/admin", productRoutes);
 app.use("/api/v1/dashboard/admin", categoryRoutes);
+app.use("/api/v1/dashboard/admin", clientRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");
