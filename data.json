@@ -1,0 +1,67 @@
+{
+    "data": [
+        {
+            "tag": "paypal",
+            "input": 9,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2024-11-07 12:04:12Z"
+        },
+        {
+            "tag": "stripe",
+            "input": 8,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "razorpay",
+            "input": 7,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "mercado-pago",
+            "input": 6,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "paystack",
+            "input": 5,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "flutterWave",
+            "input": 4,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "paytabs",
+            "input": 3,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "wallet",
+            "input": 2,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2023-12-21 13:24:02Z"
+        },
+        {
+            "tag": "cash",
+            "input": 1,
+            "active": true,
+            "created_at": "2023-12-21 13:24:02Z",
+            "updated_at": "2025-01-13 09:31:25Z"
+        }
+    ]
+}
