@@ -18,6 +18,11 @@ import bannerRoutes from "./routes/Banner.js";
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/CategoriesRoute.js";
 import clientRouter from "./routes/ClientRoute.js";
+import extraGroupRouter from "./routes/ExtraGroup.js";
+import restProductsRoutes from "./routes/RestProducts.js";
+import PaymentRoutes from "./routes/PaymentRoutes.js";
+import paymentRestRoutes from "./routes/PaymentRestRoutes.js";
+import paymentPayloadRoutes from "./routes/Payment_payload.js";
 dotenv.config();
 
 const app = express();
@@ -31,6 +36,7 @@ app.use(bodyParser.json());
 app.use("/api/v1/dashboard/admin", authRoutes);
 app.use("/api/v1/dashboard/admin", currenciesRoutes);
 app.use("/api/v1/rest", orderRoutes);
+app.use("/api/v1/rest", paymentRestRoutes);
 app.use("/api/v1/dashboard/admin", brandRoutes);
 app.use("/api/v1/dashboard/admin", unitRoutes);
 app.use("/api/v1/dashboard/admin", subscriptionRoutes);
@@ -42,6 +48,10 @@ app.use("/api/v1/dashboard/admin", bannerRoutes);
 app.use("/api/v1/dashboard/admin", productRoutes);
 app.use("/api/v1/dashboard/admin", categoryRoutes);
 app.use("/api/v1/dashboard/admin", clientRouter);
+app.use("/api/v1/dashboard/admin", extraGroupRouter);
+app.use("/api/v1/rest/products", restProductsRoutes);
+app.use("/api/v1/dashboard/admin", PaymentRoutes);
+app.use("/api/v1/dashboard/admin", paymentPayloadRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");

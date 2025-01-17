@@ -347,7 +347,7 @@ export const getAllShops = async (req, res) => {
       }
       : {};
 
-    const shops = await Shop.find(searchFilter)
+    const data = await Shop.find(searchFilter)
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 })
@@ -366,7 +366,7 @@ export const getAllShops = async (req, res) => {
     res.status(200).json({
       message: "Shops fetched successfully",
       data: {
-        shops,
+        data,
         meta,
       },
     });

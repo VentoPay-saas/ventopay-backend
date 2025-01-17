@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import StockSchema from "./ProductStock.js";
 
 const addonSchema = new mongoose.Schema(
@@ -51,6 +51,42 @@ const addonSchema = new mongoose.Schema(
       ref: "unit",
       required: true,
     },
+    category_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      default: null
+    },
+    brand_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
+      default: null
+    },
+    kitchen: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Kitchen",
+      default: null
+    },
+    reviews: [],
+    slug: {
+      type: String
+    },
+    sku: {
+      type: String,
+    },
+    properties: [],
+    kcal: {
+      type: String,
+    },
+    protein: {
+      type: String,
+    },
+    carbs: {
+      type: String,
+    },
+    fats: {
+      type: String,
+    },
+
     addon: {
       type: Boolean,
       default: false,
@@ -59,18 +95,29 @@ const addonSchema = new mongoose.Schema(
       type: [StockSchema],
       default: [],
     },
-    images: {
-      type: [String],
-    },
+    images: [],
     status: {
       type: String,
       enum: ["pending", "published", "unpublished"],
       default: "pending"
-    }
+    },
+    vegetarian: {
+      type: Boolean,
+      default: false
+    },
+    extras: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ExtraGroup',
+        default: null
+      }
+    ]
   },
+
   {
     timestamps: true,
-  }
+  },
+
 );
 
 const Addons = mongoose.model("addon", addonSchema);

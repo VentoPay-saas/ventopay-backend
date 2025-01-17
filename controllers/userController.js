@@ -133,3 +133,68 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 }
+
+
+export const getPaginateUsers = async (req, res) => {
+  try {
+    const { perPage = 20, page = 1 } = req.query;
+
+    const limit = parseInt(perPage, 10);
+    const currentPage = parseInt(page, 10);
+    const skip = (currentPage - 1) * limit;
+
+    const users = await User.find({})
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const total = await User.countDocuments();
+    const lastPage = Math.ceil(total / limit);
+
+    const basePath = `${req.protocol}://${req.get('host')}${req.originalUrl.split('?')[0]}`;
+    const queryParams = new URLSearchParams(req.query);
+    queryParams.set('page', currentPage - 1);
+    const prevUrl = currentPage > 1 ? `${basePath}?${queryParams.toString()}` : null;
+    queryParams.set('page', currentPage + 1);
+    const nextUrl = currentPage < lastPage ? `${basePath}?${queryParams.toString()}` : null;
+
+    const meta = {
+      current_page: currentPage,
+      from: skip + 1,
+      last_page: lastPage,
+      links: [
+        {
+          url: prevUrl,
+          label: '&laquo; Previous',
+          active: false,
+        },
+        ...Array.from({ length: lastPage }, (_, i) => ({
+          url: `${basePath}?${new URLSearchParams({ ...req.query, page: i + 1 }).toString()}`,
+          label: (i + 1).toString(),
+          active: currentPage === i + 1,
+        })),
+        {
+          url: nextUrl,
+          label: 'Next &raquo;',
+          active: false,
+        },
+      ],
+      path: basePath,
+      per_page: perPage.toString(),
+      to: Math.min(skip + limit, total),
+      total,
+    };
+
+    res.status(200).json({
+      message: 'Users fetched successfully.',
+      data: users,
+      meta,
+    });
+  } catch (error) {
+    console.error('Error fetching paginated users:', error);
+    res.status(500).json({
+      message: 'Internal server error.',
+      error: error.message,
+    });
+  }
+}

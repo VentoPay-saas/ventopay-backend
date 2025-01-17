@@ -16,6 +16,28 @@ const StockSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  addon: {
+    type: Boolean,
+    default: false
+  },
+  addons: [],
+  countable_id: {
+    type: Number
+  },
+  total_price: {
+    type: Number
+  },
+  tax: {
+    type: Number
+  },
+  bonus: {
+    type: String,
+    default: null
+  },
+  extras: [],
+
+
+
 });
 
 export default StockSchema;

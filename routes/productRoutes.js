@@ -8,6 +8,7 @@ import {
   getProductStockById,
   toggleProduct_StockActiveStatus,
 } from "../controllers/ProductsController.js";
+import { addExtras } from "../controllers/ProductsController.js";
 
 const router = Router();
 
@@ -18,5 +19,5 @@ router.get("/products/:addonId", getProductStockById);
 router.delete("/products/delete", deleteProductById);
 router.post("/products/:addonId/active", toggleProduct_StockActiveStatus);
 router.post("/products/:addonId/status/change", changeProductStatus);
-
+router.post("/products/:id/extras", addExtras);
 export default router;
