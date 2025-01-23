@@ -375,3 +375,22 @@ export const getAllShops = async (req, res) => {
   }
 };
 
+export const getShopById = async (req, res) => {
+  try {
+    const shopId = req.params.id;
+    if (!shopId) {
+      return res.status(400).json({ message: "shopId is required" });
+    }
+
+    const shop = await Shop.findById(shopId).populate("user_id").lean();
+    if (!shop) {
+      return res.status(404).json({ message: "Shop not found" });
+    }
+
+    res.status(200).json({ message: "Shop fetched successfully", data: shop });
+  }
+  catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+

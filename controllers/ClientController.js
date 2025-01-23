@@ -1,5 +1,6 @@
 import cloudinary from "../config/Cloudinary.js";
 import Client from "../models/ClientModel.js";
+import { User } from "../models/userModel.js";
 import { HttpStatusCode } from "../utils/StatusCodes.js";
 
 export const createClient = async (req, res) => {
@@ -19,7 +20,7 @@ export const createClient = async (req, res) => {
       ? await cloudinary.uploader.upload(req.file.path)
       : null;
 
-    const newClient = new Client({
+    const newClient = new User({
       firstname,
       lastname,
       email,
@@ -27,7 +28,6 @@ export const createClient = async (req, res) => {
       birthday,
       gender,
       password,
-      images: result ? [result.secure_url] : [],
     });
 
     await newClient.save();

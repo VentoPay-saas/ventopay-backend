@@ -1,4 +1,5 @@
 import Addons from "../models/products.js";
+import Shop from "../models/ShopModel.js";
 
 export const create_Product_addons = async (req, res) => {
   try {
@@ -365,3 +366,225 @@ export const getTheRestProducts = async (req, res) => {
     });
   }
 }
+
+
+// export const calculateProducts = async (req, res) => {
+//   try {
+//     const { lang, ...queryWithoutLang } = req.query;
+//     console.log("🚀 ~ calculateProducts ~ queryWithoutLang:", queryWithoutLang)
+
+//     const { products, currency_id, shop_id } = queryWithoutLang;
+
+//     if (!currency_id) {
+//       return res.status(400).json({ message: "Currency ID is required" });
+//     }
+
+//     if (!shop_id) {
+//       return res.status(400).json({ message: "Shop ID is required" });
+//     }
+//     const productsData = [];
+//     Object.keys(queryWithoutLang).forEach((key) => {
+//       const productMatch = key.match(/^products\[(\d+)\]\[(.+)\]$/);
+//       if (productMatch) {
+//         const index = parseInt(productMatch[1], 10);
+//         const field = productMatch[2];
+//         productsData[index] = productsData[index] || {};
+//         productsData[index][field] = queryWithoutLang[key];
+//       }
+//     });
+//     console.log("🚀 ~ calculateProducts ~ productsData:", productsData)
+
+
+
+//     if (!Array.isArray(productsData) || productsData.length === 0) {
+//       return res.status(400).json({ message: "At least one product is required in the query." });
+//     }
+
+//     let totalPrice = 0;
+//     let totalTax = 0;
+//     let totalDiscount = 0;
+//     const stocks = [];
+
+//     for (const product of products) {
+//       const { stock_id, quantity } = product;
+//       console.log("🚀 ~ calculateProducts ~ stock_id, quantity:", stock_id, quantity)
+
+//       if (!stock_id) {
+//         return res.status(400).json({ message: "Each product must include a valid stock_id." });
+//       }
+
+//       if (!quantity || quantity < 1) {
+//         return res.status(400).json({ message: "Each product must have a valid quantity (>= 1)." });
+//       }
+//       const productData = await Addons.findById({
+//         'stocks._id': stock_id
+//       }).lean();
+//       console.log("🚀 ~ calculateProducts ~ productData:", productData)
+
+//       if (!productData) {
+//         return res.status(404).json({ message: `Product with stock_id ${stock_id} not found.` });
+//       }
+
+//       const productPrice = productData.price * quantity;
+//       const productTax = (productData.tax || 0) * quantity;
+//       const productDiscount = (productData.discount || 0) * quantity;
+
+//       totalPrice += productPrice;
+//       totalTax += productTax;
+//       totalDiscount += productDiscount;
+
+//       stocks.push({
+//         stock_id,
+//         quantity: Number(quantity),
+//         price: productPrice,
+//         tax: productTax,
+//         discount: productDiscount,
+//       });
+//     }
+
+//     const shopData = await Shop.findById(shop_id);
+
+//     if (!shopData) {
+//       return res.status(404).json({ message: `Shop with ID ${shop_id} not found.` });
+//     }
+
+//     const response = {
+//       timestamp: new Date().toISOString(),
+//       status: true,
+//       message: "Success",
+//       data: {
+//         status: true,
+//         code: "NO_ERROR",
+//         data: {
+//           stocks,
+//           total_tax: totalTax,
+//           price: totalPrice,
+//           total_shop_tax: shopData.tax || 0,
+//           total_price: totalPrice - totalDiscount + totalTax,
+//           total_discount: totalDiscount,
+//           delivery_fee: 0,
+//           rate: 1,
+//           coupon_price: 0,
+//           shop: shopData,
+//           coupon: null,
+//           tips: 0,
+//           service_fee: shopData.service_fee || 1,
+//         },
+//       },
+//     };
+
+//     return res.status(200).json(response);
+//   } catch (error) {
+//     console.error("Error calculating products:", error);
+//     return res.status(500).json({
+//       timestamp: new Date().toISOString(),
+//       status: false,
+//       message: "Server error",
+//       error: error.message,
+//     });
+//   }
+// };
+
+export const calculateProducts = async (req, res) => {
+  try {
+    const { lang, ...queryWithoutLang } = req.query;
+    const { products, currency_id, shop_id } = queryWithoutLang;
+
+    if (!currency_id) {
+      return res.status(400).json({ message: "Currency ID is required" });
+    }
+
+    if (!shop_id) {
+      return res.status(400).json({ message: "Shop ID is required" });
+    }
+
+    if (!Array.isArray(products) || products.length === 0) {
+      return res.status(400).json({ message: "At least one product is required in the query." });
+    }
+
+    let totalPrice = 0;
+    let totalTax = 0;
+    let totalDiscount = 0;
+    const stocks = [];
+
+    for (const product of products) {
+      const { stock_id, quantity } = product;
+
+      if (!stock_id) {
+        return res.status(400).json({ message: "Each product must include a valid stock_id." });
+      }
+
+      if (!quantity || quantity < 1) {
+        return res.status(400).json({ message: "Each product must have a valid quantity (>= 1)." });
+      }
+
+      const productData = await Addons.findOne({
+        'stocks._id': stock_id
+      }).lean();
+
+      if (!productData) {
+        return res.status(404).json({ message: `Product with stock_id ${stock_id} not found.` });
+      }
+      let prPrice = productData.stocks.reduce((sum, item) => sum + item.price, 0);
+
+      const productPrice = prPrice * quantity;
+      const productTax = (productData.tax || 0) * quantity;
+      const productDiscount = (productData.discount || 0) * quantity;
+
+      totalPrice += productPrice;
+      totalTax += productTax;
+      totalDiscount += productDiscount;
+
+      stocks.push({
+        stock_id,
+        quantity: Number(quantity),
+        price: productPrice,
+        tax: productTax,
+        discount: productDiscount,
+      });
+    }
+
+    // Fetch the shop data
+    const shopData = await Shop.findById(shop_id);
+
+    if (!shopData) {
+      return res.status(404).json({ message: `Shop with ID ${shop_id} not found.` });
+    }
+
+    // Prepare the response object
+    const response = {
+      timestamp: new Date().toISOString(),
+      status: true,
+      message: "Success",
+      data: {
+        status: true,
+        code: "NO_ERROR",
+        data: {
+          stocks,
+          total_tax: totalTax,
+          price: totalPrice,
+          total_shop_tax: shopData.tax || 0,
+          total_price: totalPrice - totalDiscount + totalTax,
+          total_discount: totalDiscount,
+          delivery_fee: 0,
+          rate: 1,
+          coupon_price: 0,
+          shop: shopData,
+          coupon: null,
+          tips: 0,
+          service_fee: shopData.service_fee || 1,
+        },
+      },
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.error("Error calculating products:", error);
+    return res.status(500).json({
+      timestamp: new Date().toISOString(),
+      status: false,
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
