@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   addProductStocks,
+  calculateProducts,
   changeProductStatus,
   create_Product_addons,
   deleteProductById,
@@ -20,4 +21,5 @@ router.delete("/products/delete", deleteProductById);
 router.post("/products/:addonId/active", toggleProduct_StockActiveStatus);
 router.post("/products/:addonId/status/change", changeProductStatus);
 router.post("/products/:id/extras", addExtras);
+router.get("/order/products/calculate", calculateProducts);
 export default router;

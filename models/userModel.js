@@ -16,15 +16,14 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     role: {
       type: String,
       default: "user",
-      enums: ["user", "waiter", "admin", "moderator"],
+      enums: ["user", "waiter", "admin", "super-admin", "seller"],
     },
     img: {
-      type: String,
+      type: Array,
       default:
         "https://www.shutterstock.com/shutterstock/photos/2526512481/display_1500/stock-vector-avatar-gender-neutral-silhouette-vector-illustration-profile-picture-no-image-for-social-media-2526512481.jpg",
     },
@@ -32,6 +31,7 @@ const userSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop",
     },
+    invitations: [],
     // worker_shop: {
     //   type: [mongoose.Schema.Types.ObjectId],
     //   ref: "WorkerShop",

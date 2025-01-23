@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createShop,
   getAllShops,
+  getShopById,
   getShops,
   getShopWorkingDates,
   getTheShopClosedDates,
@@ -22,5 +23,6 @@ router.get("/shop-working-days/:shopId", getShopWorkingDates);
 router.get("/shops/paginate", getShops);
 router.post("/shops/:id/verify", VerifyShop);
 router.get("/shops", getAllShops);
+router.get("/shops/:id", getShopById);
 
 export default router;
