@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/units/paginate", getUnits);
 router.get("/units/:_id", getUnitById);
 router.post("/units", createUnit);
-router.delete("/unit/:_id", deleteUnit);
+router.delete("/units/delete", deleteUnit);
 router.put("/units/:_id", updateUnit);
 router.post("/units/active/:id", toggleUnitActive);
 

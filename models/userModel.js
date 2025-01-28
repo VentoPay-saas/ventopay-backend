@@ -14,6 +14,23 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
+
+    isWork: {
+      type: Boolean,
+      default: false,
+    },
+    registered_at: {
+      type: Date,
+      default: Date.now(),
+    },
+    empty_p: {
+      type: Boolean,
+      default: true,
+    },
     password: {
       type: String,
     },
@@ -23,7 +40,7 @@ const userSchema = new mongoose.Schema(
       enums: ["user", "waiter", "admin", "super-admin", "seller"],
     },
     img: {
-      type: Array,
+      type: Object,
       default:
         "https://www.shutterstock.com/shutterstock/photos/2526512481/display_1500/stock-vector-avatar-gender-neutral-silhouette-vector-illustration-profile-picture-no-image-for-social-media-2526512481.jpg",
     },
@@ -32,6 +49,20 @@ const userSchema = new mongoose.Schema(
       ref: "Shop",
     },
     invitations: [],
+    birthday: {
+      type: Date,
+    },
+    gender: {
+      type: String
+    },
+    phone: {
+      type: String
+    },
+    address: {
+      type: String
+    },
+
+
     // worker_shop: {
     //   type: [mongoose.Schema.Types.ObjectId],
     //   ref: "WorkerShop",

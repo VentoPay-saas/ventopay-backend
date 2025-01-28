@@ -19,7 +19,11 @@ const groupSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Shops",
     default: null
-  }
+  },
+  active: {
+    type: Boolean,
+    default: true
+  },
 }, {
   timestamps: true
 });
