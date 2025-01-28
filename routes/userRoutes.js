@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import {
+  deleteUser,
   getPaginateUsers,
   getUserById,
   getUserWithQuery,
@@ -18,5 +19,6 @@ router.get("/users/paginate", getPaginateUsers);
 router.get("/users/search", getUserWithQuery);
 router.get("/users/:id", getUserById);
 router.put("/users/:id", updateUser);
+router.delete("/users/delete", deleteUser);
 
 export default router;

@@ -23,6 +23,10 @@ import restProductsRoutes from "./routes/RestProducts.js";
 import PaymentRoutes from "./routes/PaymentRoutes.js";
 import paymentRestRoutes from "./routes/PaymentRestRoutes.js";
 import paymentPayloadRoutes from "./routes/Payment_payload.js";
+import ExtraGroupValueRoutes from "./routes/ExtraGroupValueRoute.js";
+import SettingsRoutes from "./routes/SettingsRoute.js";
+import userRoutes from "./routes/user.js";
+import languagesRestRoutes from "./routes/LanguagesRestRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -35,8 +39,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/api/v1/dashboard/admin", authRoutes);
 app.use("/api/v1/dashboard/admin", currenciesRoutes);
-app.use("/api/v1/rest", orderRoutes);
+app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/rest", paymentRestRoutes);
+app.use("/api/v1/rest", languagesRestRoutes);
 app.use("/api/v1/dashboard/admin", brandRoutes);
 app.use("/api/v1/dashboard/admin", unitRoutes);
 app.use("/api/v1/dashboard/admin", subscriptionRoutes);
@@ -52,6 +57,9 @@ app.use("/api/v1/dashboard/admin", extraGroupRouter);
 app.use("/api/v1/rest/products", restProductsRoutes);
 app.use("/api/v1/dashboard/admin", PaymentRoutes);
 app.use("/api/v1/dashboard/admin", paymentPayloadRoutes);
+app.use("/api/v1/dashboard/admin", ExtraGroupValueRoutes);
+app.use("/api/v1/dashboard/admin", SettingsRoutes);
+app.use("/api/v1/dashboard/user", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");

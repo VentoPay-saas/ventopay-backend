@@ -1,40 +1,37 @@
 import Brand from "../models/Brand.js";
 
 export const createBrand = async (req, res) => {
+  const { title, active, ...rest } = req.query;
+
+  let images = [];
+  images.push({
+    uid: rest.images[0].uid,
+    name: rest.images[0].name,
+    status: rest.images[0].status,
+    url: rest.images[0].url,
+    created: rest.images[0].created === "true",
+  });
+
+  const brand = new Brand({
+    title,
+    active: active === '1' || active === "true",
+    images,
+  });
+
   try {
-    const { title, active = true, ...queryImages } = req.query;
-    console.log(queryImages.images[0].uid);
+    const newBrand = await brand.save();
 
-    if (!title || !queryImages.images[0].uid) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const images = [];
-
-    images.push({
-      uid: queryImages.images[0].uid,
-      name: queryImages.images[0].name,
-      status: queryImages.images[0].status,
-      url: queryImages.images[0].url,
-      created: queryImages.images[0].created === "true",
+    res.status(201).json({
+      message: "Brand created successfully",
+      data: newBrand,
     });
-
-    const brand = new Brand({
-      title,
-      active: active === "1" || active === "true",
-      status: "published",
-      images,
-    });
-
-    await brand.save();
-
-    res
-      .status(201)
-      .json({ message: "Brand created successfully", data: brand });
-  } catch (error) {
+  }
+  catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
   }
+
+
 };
 
 export const getPaginateBrands = async (req, res) => {

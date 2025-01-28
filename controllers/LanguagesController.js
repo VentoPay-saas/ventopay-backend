@@ -87,7 +87,7 @@ export const getByIdLanguage = async (req, res) => {
       return res.status(404).json({ error: 'Language not found' });
     }
 
-    res.json(language);
+    res.json({ data: language, status: true });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch language', details: err });
   }
@@ -106,5 +106,25 @@ export const activeLanguage = async (req, res) => {
     res.json(activeLanguages);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch active languages', details: err });
+  }
+};
+
+
+
+export const getActiveLanguages = async (req, res) => {
+  try {
+    const activeLanguages = await Language.find({ active: true });
+
+    if (!activeLanguages.length) {
+      return res.status(404).json({ message: 'No active languages found' });
+    }
+
+    res.status(200).json({
+      message: `${activeLanguages.length} active language(s) found`,
+      data: activeLanguages,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred while fetching active languages', error: error.message });
   }
 };

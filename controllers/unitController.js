@@ -54,14 +54,15 @@ export const getUnits = async (req, res) => {
 };
 
 export const deleteUnit = async (req, res) => {
+  const id = req.query.ids[0];
   try {
-    const getUnit = await Units.findById(req.params._id);
+    const getUnit = await Units.findById(id);
     if (!getUnit) {
       res.status(HttpStatusCode.NOT_FOUND).json({
         message: "Unit details not found",
       });
     }
-    await Units.findByIdAndDelete(req.params._id);
+    await Units.findByIdAndDelete(id);
     res
       .status(HttpStatusCode.OK)
       .json({ message: "Unit Deleted Successfully" });
