@@ -3,6 +3,7 @@ import {
   deleteUser,
   getPaginateUsers,
   getUserById,
+  getUserStatistics,
   getUserWithQuery,
   loginController,
   registerController,
@@ -20,5 +21,6 @@ router.get("/users/search", getUserWithQuery);
 router.get("/users/:id", getUserById);
 router.put("/users/:id", updateUser);
 router.delete("/users/delete", deleteUser);
+router.get("/statistics/users", getUserStatistics);
 
 export default router;

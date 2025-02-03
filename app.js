@@ -27,6 +27,9 @@ import ExtraGroupValueRoutes from "./routes/ExtraGroupValueRoute.js";
 import SettingsRoutes from "./routes/SettingsRoute.js";
 import userRoutes from "./routes/user.js";
 import languagesRestRoutes from "./routes/LanguagesRestRoutes.js";
+import rolesRoutes from "./routes/RolesRoute.js";
+import sms_payloadRoutes from "./routes/smsPayloadRoutes.js";
+import email_provider_Routes from "./routes/EmailProvider.js";
 dotenv.config();
 
 const app = express();
@@ -59,6 +62,9 @@ app.use("/api/v1/dashboard/admin", PaymentRoutes);
 app.use("/api/v1/dashboard/admin", paymentPayloadRoutes);
 app.use("/api/v1/dashboard/admin", ExtraGroupValueRoutes);
 app.use("/api/v1/dashboard/admin", SettingsRoutes);
+app.use("/api/v1/dashboard/admin", rolesRoutes);
+app.use("/api/v1/dashboard/admin", sms_payloadRoutes);
+app.use("/api/v1/dashboard/admin", email_provider_Routes);
 app.use("/api/v1/dashboard/user", userRoutes);
 
 app.get("/", (req, res) => {
