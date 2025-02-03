@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema({
   payment_type: {
     type: String,
     required: true,
-    enum: ['cash', 'card', 'online']
+    enum: ['cash', 'wallet']
   },
   products: [{
     stock_id: {
@@ -51,8 +51,8 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'accepted', 'ready', 'on_a_way', 'delivered', 'canceled'],
-    default: 'pending'
+    enum: ['new', 'pending', 'accepted', 'ready', 'on_a_way', 'delivered', 'canceled'],
+    default: 'new'
   },
   delivery_type: {
     type: String,
@@ -70,7 +70,13 @@ const orderSchema = new mongoose.Schema({
   paid_by_split: {
     type: Boolean,
     default: false
-  }
+  },
+  transaction: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Transaction',
+    default: null
+  },
+
 }, {
   timestamps: true
 });

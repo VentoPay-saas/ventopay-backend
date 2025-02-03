@@ -1,5 +1,6 @@
 import Addons from "../models/products.js";
 import Shop from "../models/ShopModel.js";
+import { getDateRange } from "../utils/GetTimeFn.js";
 
 export const create_Product_addons = async (req, res) => {
   try {
@@ -588,3 +589,51 @@ export const calculateProducts = async (req, res) => {
     });
   }
 };
+
+
+export const getProductsStatistics = async (req, res) => {
+  try {
+    const { time, perPage, page } = req.query;
+    const { startDate, endDate } = getDateRange(time);
+    const limit = perPage ? parseInt(perPage) : 5;
+    const skip = page ? (parseInt(page) - 1) * limit : 0;
+
+    // Get total count of documents
+    const totalCount = await Addons.countDocuments({
+      createdAt: { $gte: startDate, $lte: endDate }
+    });
+
+    // Fetch paginated addons
+    const addons = await Addons.find({
+      createdAt: { $gte: startDate, $lte: endDate }
+    })
+      .limit(limit)
+      .skip(skip)
+      .sort({ createdAt: -1 });
+
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = parseInt(page) || 1;
+
+    res.json({
+      data: {
+        current_page: currentPage,
+        data: addons.map(addon => ({
+          title: addon.title,
+          id: addon._id,
+          img: addon?.images[0]?.url,
+          count: addon.count,
+        })),
+        first_page_url: `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}?page=1`,
+        from: skip + 1,
+        next_page_url: currentPage < totalPages ? `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}?page=${currentPage + 1}` : null,
+        path: `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}`,
+        per_page: perPage,
+        prev_page_url: currentPage > 1 ? `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}?page=${currentPage - 1}` : null,
+        to: skip + addons.length
+      }
+
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}

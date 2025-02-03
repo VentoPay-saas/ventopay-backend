@@ -6,6 +6,7 @@ import {
   create_Product_addons,
   deleteProductById,
   getPaginatedProducts_addons,
+  getProductsStatistics,
   getProductStockById,
   toggleProduct_StockActiveStatus,
 } from "../controllers/ProductsController.js";
@@ -22,4 +23,5 @@ router.post("/products/:addonId/active", toggleProduct_StockActiveStatus);
 router.post("/products/:addonId/status/change", changeProductStatus);
 router.post("/products/:id/extras", addExtras);
 router.get("/order/products/calculate", calculateProducts);
+router.get("/statistics/products", getProductsStatistics);
 export default router;

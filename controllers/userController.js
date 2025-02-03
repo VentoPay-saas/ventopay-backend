@@ -1,5 +1,6 @@
 import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import { getDateRange } from "../utils/GetTimeFn.js";
 
 const JWT_SECRET = "sdjhfksld340975394lkvkfo94";
 
@@ -137,13 +138,15 @@ export const updateUser = async (req, res) => {
 
 export const getPaginateUsers = async (req, res) => {
   try {
-    const { perPage = 20, page = 1 } = req.query;
+    const { perPage = 20, page = 1, role } = req.query;
 
     const limit = parseInt(perPage, 10);
     const currentPage = parseInt(page, 10);
     const skip = (currentPage - 1) * limit;
 
-    const users = await User.find({})
+    const users = await User.find({
+      role: role || { $exists: true },
+    })
       .skip(skip)
       .limit(limit)
       .lean();
@@ -279,3 +282,53 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
+
+export const getUserStatistics = async (req, res) => {
+  try {
+    const { time, perPage, page } = req.query;
+    const { startDate, endDate } = getDateRange(time);
+    const limit = perPage ? parseInt(perPage) : 5;
+    const skip = page ? (parseInt(page) - 1) * limit : 0;
+
+    const totalCount = await User.countDocuments({
+      createdAt: { $gte: startDate, $lte: endDate }
+    });
+    const users = await User.find({
+      createdAt: { $gte: startDate, $lte: endDate }
+    })
+      .limit(limit)
+      .skip(skip)
+      .sort({ createdAt: -1 });
+
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = parseInt(page) || 1;
+
+    res.json({
+      data: {
+        current_page: currentPage,
+        data: users.map(user => ({
+          firstname: user.firstname,
+          lastname: user.lastname,
+          id: user._id,
+          email: user.email,
+          img: user.img,
+          registeredAt: user.createdAt,
+          count: 1,
+          phone: user.phone,
+          totalPrice: user?.totalPrice,
+        })),
+        first_page_url: `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}?page=1`,
+        from: skip + 1,
+        next_page_url: currentPage < totalPages ? `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}?page=${currentPage + 1}` : null,
+        path: `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}`,
+        per_page: perPage,
+        prev_page_url: currentPage > 1 ? `${req.protocol}://${req.get("host")}${req.originalUrl.split("?")[0]}?page=${currentPage - 1}` : null,
+        to: skip + users.length
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+
+}
