@@ -74,12 +74,13 @@ export const getCurrencyById = async (req, res) => {
 };
 
 export const deleteCurrencies = async (req, res) => {
+
   try {
-    const getItem = await Currencies.findById(req.params.id);
+    const getItem = await Currencies.findById(req.query.ids[0]);
     console.log(getItem);
 
     if (getItem) {
-      await Currencies.findByIdAndDelete(req.params.id);
+      await Currencies.findByIdAndDelete(req.query.ids[0]);
       res.status(HttpStatusCode.OK).json({
         message: "Delete Success",
       });
