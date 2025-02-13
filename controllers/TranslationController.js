@@ -2,29 +2,18 @@ import Translation from "../models/TranslationModel.js";
 
 export const createTranslation = async (req, res) => {
   try {
-
-
     const { key, group } = req.query;
     const value = req.query.value;
     if (!key || !group || !value || typeof value !== 'object') {
       return res.status(400).json({ status: false, message: "Missing required fields" });
     }
 
-    console.log("Parsed Value Object:", value);
-
-    // Transform the value object into an array of translations
     let translationsArray = Object.keys(value).map(locale => {
-      console.log(`Processing locale: ${locale}, value: ${value[locale]}`);
       return {
         locale,
         value: value[locale]
       };
     });
-
-    // Log the resulting translations array
-    console.log("Parsed Translations:", translationsArray);
-
-    // Check if the translation already exists
 
     const newTranslation = new Translation({
       key,
@@ -117,8 +106,6 @@ export const getTranslation = async (req, res) => {
 export const getTranslationForSelectedLanguage = async (req, res) => {
   try {
     const { lang } = req.query;
-
-    // Validate that the `lang` query parameter is provided
     if (!lang) {
       return res.status(400).json({
         status: false,
@@ -126,13 +113,8 @@ export const getTranslationForSelectedLanguage = async (req, res) => {
       });
     }
 
-    // Fetch all translations from the database
     const translations = await Translation.find().lean();
-
-    // Initialize an empty object to store the translated keys
     let translatedData = {};
-
-    // Loop through each translation and extract the key-value pairs for the specified language
     translations.forEach((translation) => {
       const translationForLang = translation.value.find((v) => v.locale === lang);
 
@@ -141,7 +123,6 @@ export const getTranslationForSelectedLanguage = async (req, res) => {
       }
     });
 
-    // Return the response with translations for the specified language
     return res.status(200).json({
       timestamp: new Date().toISOString(),
       status: true,
@@ -157,3 +138,40 @@ export const getTranslationForSelectedLanguage = async (req, res) => {
     });
   }
 }
+export const updateTranslation = async (req, res) => {
+  try {
+    const { key } = req.params
+    console.log("🚀 ~ updateTranslation ~ key:", key)
+    const { group } = req.query;
+
+    const value = req.query.value;
+    console.log("🚀 ~ updateTranslation ~ value:", value)
+
+    if (!key || !group || !value || typeof value !== 'object') {
+      return res.status(400).json({ status: false, message: "Missing required fields" });
+    }
+
+    let translationsArray = Object.keys(value).map(locale => {
+      return {
+        locale,
+        value: value[locale]
+      };
+    });
+
+    const updatedTranslation = await Translation.findOneAndUpdate(
+      { key, group },
+      { $set: { value: translationsArray } },
+      { new: true, upsert: false } // new: true returns the updated document
+    );
+
+    if (!updatedTranslation) {
+      return res.status(404).json({ status: false, message: "Translation not found" });
+    }
+
+    console.log("Updated Translations:", updatedTranslation);
+    return res.json({ status: true, message: "Translations updated successfully", data: updatedTranslation });
+  } catch (error) {
+    console.error("Error updating translation:", error);
+    res.status(500).json({ status: false, message: "Server error", error: error.message });
+  }
+};

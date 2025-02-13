@@ -47,13 +47,22 @@ export const createCategory = async (req, res) => {
 
 export const getPaginateCategory = async (req, res) => {
   try {
-    const { page = 1, perPage = 10, type } = req.query;
+    const { page = 1, perPage = 10, type, status, search } = req.query;
 
     const pageNumber = parseInt(page, 10);
     const itemsPerPage = parseInt(perPage, 10);
 
     const filter = {};
     if (type) filter.type = type;
+    if (status) {
+      filter.status = status
+    }
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        // { description: { $regex: search, $options: "i" } },
+      ];
+    }
     const categories = await Category.find(filter)
       .skip((pageNumber - 1) * itemsPerPage)
       .limit(itemsPerPage)

@@ -262,14 +262,25 @@ export const getShops = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 10;
-
+    const status = req.query.status
+    const search = req.query.search
     if (page < 1 || perPage < 1) {
       return res
         .status(400)
         .json({ message: "Page and perPage must be positive integers" });
     }
+    let filter = {};
+    if (status) {
+      filter.status = status
+    }
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        // { description: { $regex: search, $options: "i" } },
+      ];
+    }
 
-    const shops = await Shop.find()
+    const shops = await Shop.find(filter)
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 })

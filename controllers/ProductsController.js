@@ -134,6 +134,8 @@ export const getPaginatedProducts_addons = async (req, res) => {
     const addon = req.query.addon;
     const page = parseInt(req.query.page) || 1;
     const perPage = parseInt(req.query.perPage) || 10;
+    const status = req.query.status
+    const search = req.query.search
     if (page < 1 || perPage < 1) {
       return res
         .status(400)
@@ -143,6 +145,14 @@ export const getPaginatedProducts_addons = async (req, res) => {
     const filter = {};
     if (addon !== undefined) {
       filter.addon = addon;
+    }
+    if (status) {
+      filter.status = status
+    }
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+      ];
     }
 
     const addons = await Addons.find(filter)
