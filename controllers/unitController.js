@@ -22,18 +22,20 @@ export const createUnit = async (req, res) => {
 
 export const getUnits = async (req, res) => {
   try {
-    const { page = 1, perPage = 10 } = req.query; // Default page = 1 and perPage = 10
-
-    // Convert query params to integers
+    const { page = 1, perPage = 10, search } = req.query;
     const pageNumber = parseInt(page);
     const pageSize = parseInt(perPage);
+    let filter = {};
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+      ];
+    }
+    const units = await Units.find(filter)
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize);
 
-    // Fetch data with pagination
-    const units = await Units.find()
-      .skip((pageNumber - 1) * pageSize) // Skip documents for the previous pages
-      .limit(pageSize); // Limit the number of documents per page
 
-    // Get the total number of documents
     const totalUnits = await Units.countDocuments();
 
     res.status(HttpStatusCode.OK).json({

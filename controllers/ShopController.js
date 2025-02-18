@@ -405,3 +405,32 @@ export const getShopById = async (req, res) => {
   }
 }
 
+
+
+export const getAllShopsSearch = async (req, res) => {
+  try {
+    const { page = 1, status } = req.query;
+    const pageNumber = parseInt(page, 10) || 1;
+    const pageSize = 10;
+    if (!status) {
+      return res.status(400).json({ error: "Status is required" });
+    }
+    const shops = await Shop.find({ status })
+      .skip((pageNumber - 1) * pageSize)
+      .limit(pageSize);
+    const totalShops = await Shop.countDocuments({ status });
+
+    res.json({
+      success: true,
+      data: shops,
+      page: pageNumber,
+      total: totalShops,
+      pages: Math.ceil(totalShops / pageSize),
+    });
+
+  } catch (error) {
+    console.error("Error fetching shops:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+

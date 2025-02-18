@@ -31,6 +31,7 @@ import rolesRoutes from "./routes/RolesRoute.js";
 import sms_payloadRoutes from "./routes/smsPayloadRoutes.js";
 import email_provider_Routes from "./routes/EmailProvider.js";
 import translation_Routes from "./routes/TranslationRoute.js";
+import transaction_Routes from "./routes/TransactionRoute.js";
 dotenv.config();
 
 const app = express();
@@ -68,6 +69,7 @@ app.use("/api/v1/dashboard/admin", sms_payloadRoutes);
 app.use("/api/v1/dashboard/admin", email_provider_Routes);
 app.use("/api/v1/dashboard/user", userRoutes);
 app.use("/api/v1/dashboard/admin", translation_Routes);
+app.use("/api/v1/payments", transaction_Routes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Express Server!");

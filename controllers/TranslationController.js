@@ -32,7 +32,7 @@ export const createTranslation = async (req, res) => {
 
 export const getTranslation = async (req, res) => {
   try {
-    const { lang, perPage = 10, skip = 0, search } = req.query;
+    const { lang, perPage = 10, skip = 0, search, group } = req.query;
     let query = {};
 
     console.log("🚀 ~ getTranslation ~ query:", query);
@@ -40,6 +40,9 @@ export const getTranslation = async (req, res) => {
     // If there's a search parameter, add it to the query
     if (search) {
       query["key"] = new RegExp(search, "i");
+    }
+    if (group) {
+      query.group = group
     }
 
     // Get the total count of documents matching the query

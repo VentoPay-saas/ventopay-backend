@@ -36,7 +36,7 @@ export const createBrand = async (req, res) => {
 
 export const getPaginateBrands = async (req, res) => {
   try {
-    const { status, page = 1, limit = 10 } = req.query;
+    const { status, page = 1, limit = 10, search } = req.query;
 
     const pageNumber = parseInt(page, 10);
     const pageSize = parseInt(limit, 10);
@@ -44,6 +44,11 @@ export const getPaginateBrands = async (req, res) => {
     let filter = {};
     if (status) {
       filter.status = status;
+    }
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+      ];
     }
     const brands = await Brand.find(filter)
       .skip((pageNumber - 1) * pageSize)

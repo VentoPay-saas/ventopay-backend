@@ -61,6 +61,10 @@ const userSchema = new mongoose.Schema(
     address: {
       type: String
     },
+    wallet: {
+      price: { type: Number, default: 0 },
+      uuid: { type: String, unique: true },
+    },
 
 
     // worker_shop: {
@@ -81,4 +85,5 @@ userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-export const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
+export default User
