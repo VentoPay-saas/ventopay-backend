@@ -1,7 +1,7 @@
 import cloudinary from "../config/Cloudinary.js";
 import bcrypt from "bcrypt";
 import Client from "../models/ClientModel.js";
-import { User } from "../models/userModel.js";
+import User from "../models/userModel.js";
 import { HttpStatusCode } from "../utils/StatusCodes.js";
 
 export const createClient = async (req, res) => {

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  userId: {
+  user_id: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true
@@ -46,5 +46,12 @@ const orderSchema = new Schema({
     ],
     default: "new",
   },
+  delivery_type: {
+    type: String,
+    enum: ["dine_in", "pickup", "delivery"],
+    default: "dine_in",
+  }
 });
-export default mongoose.model("Order", orderSchema);
+const Order = mongoose.models.Order || mongoose.model('Order', orderSchema);
+
+export default Order;
